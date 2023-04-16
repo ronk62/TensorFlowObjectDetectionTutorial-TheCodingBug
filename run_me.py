@@ -5,6 +5,13 @@
 
 from Detector import *
 
+##############
+physical_devices = tf.config.experimental.list_physical_devices('GPU')
+print("Num GPUs Available: ", len(physical_devices))
+tf.config.experimental.set_memory_growth(physical_devices[0], True)
+##############
+
+
 ### this first model works fine so far on my machine with static images
 modelURL = "http://download.tensorflow.org/models/object_detection/tf2/20200711/ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8.tar.gz"
 
@@ -17,10 +24,12 @@ modelURL = "http://download.tensorflow.org/models/object_detection/tf2/20200711/
 classFile = "coco.names"
 # imagePath = "test/example-livingRoom.jpg"
 imagePath = "test/example-bluePlayer.PNG"
+videoPath = "test/street.mp4"
 threshold = 0.5
 
 detector = Detector()
 detector.readClasses(classFile)
 detector.downloadModel(modelURL)
 detector.loadModel()
-detector.predictImage(imagePath, threshold)
+# detector.predictImage(imagePath, threshold)
+detector.predictVideo(videoPath, threshold)
