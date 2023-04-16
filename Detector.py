@@ -51,7 +51,13 @@ class Detector:
         inputTensor = tf.convert_to_tensor(inputTensor, dtype=tf.uint8)
         inputTensor = inputTensor[tf.newaxis, ...]
 
+        # ## perf testing, next 1 line
+        # detStartTime = time.time()
         detections = self.model(inputTensor)
+        # ## perf testing, next 3 line3
+        # detEndTime = time.time()
+        # detFPS = 1/((detEndTime + 0.000000000001) - detStartTime)
+        # print("detFPS = ", detFPS)
 
         bboxs = detections['detection_boxes'][0].numpy()
         classIndexes = detections['detection_classes'][0].numpy().astype(np.int32)
@@ -62,7 +68,8 @@ class Detector:
         bboxIdx = tf.image.non_max_suppression(bboxs, classScores, max_output_size=50,
                                                iou_threshold=threshold, score_threshold=threshold)
         
-        print(bboxIdx)
+        ## for testing
+        # print(bboxIdx)
 
         if len(bboxIdx) != 0:
             for i in bboxIdx:
